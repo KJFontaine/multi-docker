@@ -3,7 +3,7 @@ services:
   - docker
 
 before_install:
-  - docker build -t kjfontaine/react-test -f ./client/Dockerfile.dev ./client/Dockerfile.dev
+  - docker build -t kjfontaine/react-test -f ./client/Dockerfile.dev ./clientß
 
 script:
   - docker run -e CI=true kjfontaine/react-test npm test -- --coverage
