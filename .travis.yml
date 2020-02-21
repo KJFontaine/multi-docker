@@ -1,0 +1,21 @@
+sudo: required
+services:
+  - docker
+
+before_install:
+  - docker build -y kjfontaine/react-test -f ./client/Dockerfile.dev ./client/Dockerfile.dev
+
+script:
+  - docker run -e CI=true kjfontaine/react-test npm test -- --coverage
+
+after_success:
+  - docker build -t kjfontaine/mulit-client ./client
+  - docker build -t kjfontaine/mulit-nginx ./nginx
+  - docker build -t kjfontaine/mulit-server ./server
+  - docker build -t kjfontaine/mulit-worker ./worker
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
+  - docker push kjfontaine/mulit-client
+  - docker push kjfontaine/mulit-nginx
+  - docker push kjfontaine/mulit-server
+  - docker push kjfontaine/mulit-worker
+    
